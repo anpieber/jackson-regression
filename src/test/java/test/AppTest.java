@@ -2,6 +2,7 @@ package test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -14,15 +15,28 @@ import static org.junit.Assert.assertThat;
  */
 public class AppTest {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-
-    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
-            .setDateFormat(DATE_FORMAT);
-
-    String input = "{\"date\": \"2014-01-02\"}";
+    String input = "{\"date\":\"2014-01-02\"}";
 
     @Test
-    public void testApp() throws Exception {
+    public void workingDateTest() throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        ObjectMapper OBJECT_MAPPER = new ObjectMapper().setDateFormat(format);
+        assertThat(
+                OBJECT_MAPPER.writeValueAsString(
+                        OBJECT_MAPPER.readValue(
+                                input, DateTestClass.class
+                        )
+                ),
+                is(input)
+        );
+    }
+
+    @Test
+    public void notWorkingDateTest() throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setTimeZone(TimeZone.getTimeZone("Europe/Vienna"));
+        ObjectMapper OBJECT_MAPPER = new ObjectMapper().setDateFormat(format);
         assertThat(
                 OBJECT_MAPPER.writeValueAsString(
                         OBJECT_MAPPER.readValue(
