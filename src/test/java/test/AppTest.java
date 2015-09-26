@@ -47,6 +47,19 @@ public class AppTest {
         );
     }
 
+    @Test
+    public void conversationOfTextToDateAndBackShouldWorkForViennaTimezone() throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setTimeZone(TimeZone.getTimeZone("Europe/Vienna"));
+        assertThat(format.format(format.parse("2015-01-01")), is(("2015-01-01")));
+    }
+
+    @Test
+    public void conversationOfTextToDateAndBackShouldWorkForDefaultTimezone() throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        assertThat(format.format(format.parse("2015-01-01")), is(("2015-01-01")));
+    }
+
     public static class DateTestClass {
         private Date date;
 
