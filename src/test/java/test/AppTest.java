@@ -2,6 +2,7 @@ package test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,12 +52,14 @@ public class AppTest {
     public void conversationOfTextToDateAndBackShouldWorkForViennaTimezone() throws Exception {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         format.setTimeZone(TimeZone.getTimeZone("Europe/Vienna"));
+        assertThat(format.parse("2015-01-01"), is(new GregorianCalendar(2015, 0, 1).getTime()));
         assertThat(format.format(format.parse("2015-01-01")), is(("2015-01-01")));
     }
 
     @Test
     public void conversationOfTextToDateAndBackShouldWorkForDefaultTimezone() throws Exception {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        assertThat(format.parse("2015-01-01"), is(new GregorianCalendar(2015, 0, 1).getTime()));
         assertThat(format.format(format.parse("2015-01-01")), is(("2015-01-01")));
     }
 
